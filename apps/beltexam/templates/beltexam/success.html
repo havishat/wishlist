@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>Dashboard</title>
+        {%load static%}
+        <link rel="stylesheet" href="{% static 'beltexam/style.css' %}" media="screen" title="no title"  charset="utf-8">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <h1>Hello {{user.first_name}}</h1> 
+        <a href="/">Logout</a>
+        <section>
+            <h2>Your Wish List:</h2>
+            <div class="tbl-header">
+                <table col-width = "50%">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Added by</th>
+                            <th>Date Added</th>
+                            <th>Actions</th>            
+                        </tr>
+                    </thead>
+            </div>
+            <div class="tbl-content">
+                    <tbody>
+                        <tr>
+                        {% for x in items %}  <!-- for loop shows other users items I added -->
+                        {% if x.added_id == user.id %}
+                            <td><a href="/wish_items/{{ x.id }}">{{ x.item }}</a></td> 
+                            <td>{{x.added.first_name}}</td>
+                            <td>{{x.created_at}}</td>
+                            <td><a href="/delete/{{x.id}}">Delete</a></td>
+                        </tr>
+                        {% else %}
+                            <td><a href="/wish_items/{{ x.id }}">{{ x.item }}</a></td>  <!--else for wishlist-->
+                            <td>{{x.added.first_name}}</td>
+                            <td>{{x.created_at}}</td>
+                            <td><a href="/remove/{{x.id}}">Remove from wishlist</a></td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+            </div>
+        <br><br>                
+             <br><br>
+            <h2>Other users' wish list</h2>
+            <div class="tbl-header">
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Added By</th>
+                            <th>Date Added</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+            </div>
+        <br><br>
+            <div class="tbl-content">
+                    <tbody>
+                        {% for x in all_items %}
+                        <tr> 
+                            <td><a href="/wish_items/{{ x.id }}">{{ x.item }}</a></td>
+                            <td>{{ x.added.first_name }}</td>
+                            <td>{{ x.created_at }}</td>
+                            <td>
+                                <a href="/join/{{x.id}}">Add to my wishlist</a>
+                            </td>
+                        <tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <nav>
+            <a class="endbutton" href="/addcreate">Add Item</a>
+        </nav>
+
+    </body>
+</html>
